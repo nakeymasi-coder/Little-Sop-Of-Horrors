@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retro Monster Plant Poster Prompt Generator</title>
+  <style>
+    :root{
+      --bg:#09070d;
+      --panel:#15101d;
+      --panel2:#211329;
+      --lime:#b9ff4a;
+      --green:#27ff7a;
+      --pink:#ff3fb4;
+      --purple:#a85cff;
+      --gold:#ffd166;
+      --text:#fff8f8;
+      --muted:#cfc4d8;
+      --danger:#ff315a;
+      --border:rgba(185,255,74,.28);
+      --shadow:0 0 25px rgba(185,255,74,.16), 0 0 45px rgba(255,63,180,.08);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(185,255,74,.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(255,63,180,.16), transparent 30%),
+        linear-gradient(135deg, #07050a, #130917 45%, #050307);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    .vines{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.22;
+      background-image:
+        radial-gradient(circle, rgba(185,255,74,.7) 2px, transparent 3px),
+        radial-gradient(circle, rgba(255,63,180,.65) 1px, transparent 2px);
+      background-size:90px 90px, 140px 140px;
+      animation:floatBits 18s linear infinite;
+      z-index:0;
+    }
+
+    @keyframes floatBits{
+      from{transform:translateY(0)}
+      to{transform:translateY(-120px)}
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      max-width:1180px;
+      margin:0 auto;
+      padding:28px 16px 44px;
+    }
+
+    .hero{
+      border:1px solid var(--border);
+      background:linear-gradient(135deg, rgba(21,16,29,.94), rgba(42,18,45,.86));
+      border-radius:28px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      text-align:center;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero:before{
+      content:"";
+      position:absolute;
+      width:260px;
+      height:260px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(185,255,74,.32), transparent 64%);
+      top:-130px;
+      left:-90px;
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+      padding:8px 14px;
+      border:1px solid rgba(255,63,180,.45);
+      border-radius:999px;
+      color:#fff;
+      background:rgba(255,63,180,.12);
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:14px;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(30px, 5vw, 58px);
+      line-height:1;
+      letter-spacing:-1.5px;
+      text-shadow:0 0 24px rgba(185,255,74,.28);
+    }
+
+    .subtitle{
+      max-width:780px;
+      margin:16px auto 0;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.55;
+    }
+
+    .marquee{
+      margin-top:20px;
+      overflow:hidden;
+      border-radius:18px;
+      border:1px solid rgba(185,255,74,.25);
+      background:rgba(0,0,0,.22);
+      white-space:nowrap;
+    }
+
+    .marquee span{
+      display:inline-block;
+      padding:12px 0;
+      animation:scroll 20s linear infinite;
+      color:var(--lime);
+      font-weight:800;
+      letter-spacing:.5px;
+    }
+
+    @keyframes scroll{
+      from{transform:translateX(100%)}
+      to{transform:translateX(-100%)}
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    @media(min-width:980px){
+      .layout{grid-template-columns:1fr 1fr}
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(21,16,29,.96), rgba(17,11,22,.96));
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .card h2{
+      margin:0 0 14px;
+      font-size:22px;
+      color:#fff;
+    }
+
+    .section{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:12px;
+      background:rgba(255,255,255,.035);
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .section-title strong{
+      font-size:15px;
+      color:var(--lime);
+    }
+
+    label{
+      display:block;
+      font-size:13px;
+      color:var(--muted);
+      margin:10px 0 6px;
+      font-weight:700;
+    }
+
+    select,input,textarea{
+      width:100%;
+      background:#0c0911;
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:14px;
+      padding:11px 12px;
+      outline:none;
+      font-size:14px;
+    }
+
+    textarea{
+      min-height:96px;
+      resize:vertical;
+      line-height:1.45;
+    }
+
+    select:focus,input:focus,textarea:focus{
+      border-color:var(--lime);
+      box-shadow:0 0 0 3px rgba(185,255,74,.12);
+    }
+
+    .custom{
+      margin-top:8px;
+    }
+
+    .lockrow{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:var(--muted);
+      user-select:none;
+      white-space:nowrap;
+    }
+
+    .lockrow input{
+      width:auto;
+      accent-color:var(--lime);
+    }
+
+    .buttons{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+
+    @media(min-width:640px){
+      .buttons{grid-template-columns:repeat(5,1fr)}
+    }
+
+    button{
+      border:0;
+      border-radius:16px;
+      padding:12px 10px;
+      color:#09070d;
+      font-weight:900;
+      cursor:pointer;
+      background:linear-gradient(135deg, var(--lime), var(--green));
+      box-shadow:0 0 18px rgba(185,255,74,.18);
+      transition:.18s ease;
+    }
+
+    button:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.06);
+    }
+
+    button.secondary{
+      background:linear-gradient(135deg, #fff, #d9c7ff);
+    }
+
+    button.pink{
+      background:linear-gradient(135deg, var(--pink), #ff92d5);
+    }
+
+    button.gold{
+      background:linear-gradient(135deg, var(--gold), #fff1a6);
+    }
+
+    button.danger{
+      background:linear-gradient(135deg, var(--danger), #ff8aa0);
+    }
+
+    .output{
+      min-height:430px;
+      font-family:"Courier New", monospace;
+      font-size:14px;
+      white-space:pre-wrap;
+    }
+
+    .saved-list{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .saved-item{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:16px;
+      padding:12px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .tiny{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+      margin-top:8px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%);
+      background:#111;
+      color:#fff;
+      padding:12px 16px;
+      border-radius:999px;
+      border:1px solid rgba(185,255,74,.35);
+      box-shadow:var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition:.25s ease;
+      z-index:10;
+      font-size:14px;
+    }
+
+    .toast.show{opacity:1; bottom:34px}
+  </style>
+</head>
+<body>
+  <div class="vines"></div>
+  <main class="wrap">
+    <section class="hero">
+      <div class="badge">🌿 Retro • Campy • Monster Plant Poster Generator</div>
+      <h1>Monster Plant Poster Prompt Generator</h1>
+      <p class="subtitle">
+        Build cinematic AI image prompts with retro flower-shop horror, Broadway-stage drama,
+        neon monster plants, vintage poster typography, and glamorous campy chaos.
+      </p>
+      <div class="marquee">
+        <span>🌱 Hungry Plants • Retro Horror • Broadway Drama • Glam Villains • Neon Flower Shops • Vintage Poster Magic • Campy Chaos 🌱</span>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="card">
+        <h2>🎛️ Prompt Controls</h2>
+
+        <div class="section" data-key="reference">
+          <div class="section-title"><strong>Reference Image Rule</strong><label class="lockrow"><input type="checkbox" id="lock-reference"> Lock</label></div>
+          <label>Use Reference Style?</label>
+          <select id="reference">
+            <option value="">None</option>
+            <option>Use the uploaded reference image to match the art style, lighting, color mood, composition energy, and poster vibe. Do not explain the reference analysis.</option>
+            <option>Use the uploaded reference image for color palette and lighting only.</option>
+            <option>Use the uploaded reference image for character styling only.</option>
+            <option>Use the uploaded reference image for composition and typography vibe only.</option>
+          </select>
+          <input class="custom" id="custom-reference" placeholder="Custom reference rule..." />
+        </div>
+
+        <div class="section" data-key="plant">
+          <div class="section-title"><strong>Monster Plant</strong><label class="lockrow"><input type="checkbox" id="lock-plant"> Lock</label></div>
+          <label>Plant Type</label>
+          <select id="plant"></select>
+          <input class="custom" id="custom-plant" placeholder="Custom plant monster..." />
+        </div>
+
+        <div class="section" data-key="personality">
+          <div class="section-title"><strong>Plant Personality</strong><label class="lockrow"><input type="checkbox" id="lock-personality"> Lock</label></div>
+          <label>Personality</label>
+          <select id="personality"></select>
+          <input class="custom" id="custom-personality" placeholder="Custom plant personality..." />
+        </div>
+
+        <div class="section" data-key="era">
+          <div class="section-title"><strong>Era / Style</strong><label class="lockrow"><input type="checkbox" id="lock-era"> Lock</label></div>
+          <label>Era Style</label>
+          <select id="era"></select>
+          <input class="custom" id="custom-era" placeholder="Custom era/style..." />
+        </div>
+
+        <div class="section" data-key="scene">
+          <div class="section-title"><strong>Scene / Background</strong><label class="lockrow"><input type="checkbox" id="lock-scene"> Lock</label></div>
+          <label>Scene</label>
+          <select id="scene"></select>
+          <input class="custom" id="custom-scene" placeholder="Custom scene..." />
+        </div>
+
+        <div class="section" data-key="character">
+          <div class="section-title"><strong>Character</strong><label class="lockrow"><input type="checkbox" id="lock-character"> Lock</label></div>
+          <label>Main Character</label>
+          <select id="character"></select>
+          <input class="custom" id="custom-character" placeholder="Custom character..." />
+        </div>
+
+        <div class="section" data-key="outfit">
+          <div class="section-title"><strong>Outfit / Styling</strong><label class="lockrow"><input type="checkbox" id="lock-outfit"> Lock</label></div>
+          <label>Outfit</label>
+          <select id="outfit"></select>
+          <input class="custom" id="custom-outfit" placeholder="Custom outfit..." />
+        </div>
+
+        <div class="section" data-key="lighting">
+          <div class="section-title"><strong>Lighting / Mood</strong><label class="lockrow"><input type="checkbox" id="lock-lighting"> Lock</label></div>
+          <label>Lighting</label>
+          <select id="lighting"></select>
+          <input class="custom" id="custom-lighting" placeholder="Custom lighting..." />
+        </div>
+
+        <div class="section" data-key="colors">
+          <div class="section-title"><strong>Color Palette</strong><label class="lockrow"><input type="checkbox" id="lock-colors"> Lock</label></div>
+          <label>Colors</label>
+          <select id="colors"></select>
+          <input class="custom" id="custom-colors" placeholder="Custom colors..." />
+        </div>
+
+        <div class="section" data-key="typography">
+          <div class="section-title"><strong>Typography</strong><label class="lockrow"><input type="checkbox" id="lock-typography"> Lock</label></div>
+          <label>Typography Style</label>
+          <select id="typography"></select>
+          <input class="custom" id="custom-typography" placeholder="Custom typography..." />
+        </div>
+
+        <div class="section" data-key="text">
+          <div class="section-title"><strong>Poster Text</strong><label class="lockrow"><input type="checkbox" id="lock-text"> Lock</label></div>
+          <label>Headline Preset</label>
+          <select id="text"></select>
+          <input class="custom" id="custom-text" placeholder="Custom headline text..." />
+        </div>
+
+        <div class="section" data-key="camera">
+          <div class="section-title"><strong>Camera / Framing</strong><label class="lockrow"><input type="checkbox" id="lock-camera"> Lock</label></div>
+          <label>Camera</label>
+          <select id="camera"></select>
+          <input class="custom" id="custom-camera" placeholder="Custom camera/framing..." />
+        </div>
+
+        <div class="buttons">
+          <button onclick="generatePrompt()">Generate</button>
+          <button class="pink" onclick="randomizeUnlocked()">Random</button>
+          <button class="secondary" onclick="copyPrompt()">Copy</button>
+          <button class="danger" onclick="clearAll()">Clear</button>
+          <button class="gold" onclick="savePrompt()">Save</button>
+        </div>
+
+        <p class="tiny">
+          Tip: check “Lock” beside any section you don’t want the Random button to change.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>🧾 Final Prompt</h2>
+        <textarea id="output" class="output" placeholder="Your generated prompt will appear here..."></textarea>
+
+        <h2 style="margin-top:18px;">💾 Saved Prompts</h2>
+        <div id="savedList" class="saved-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" class="toast">Copied</div>
+
+  <script>
+    const optionData = {
+      plant: [
+        "None",
+        "giant singing carnivorous plant with glossy lips and thorny vines",
+        "alien venus flytrap queen with glowing teeth",
+        "oversized lipstick-mouth flower monster in a cracked pot",
+        "neon greenhouse plant beast with twisting tentacles",
+        "cute baby plant turning wicked under stage lights",
+        "gigantic rose monster with velvet petals and pearl fangs",
+        "toothy orchid creature wrapped around a vintage cash register",
+        "mutant ivy plant crawling across the flower shop walls",
+        "sparkling diva plant with rhinestone petals and dramatic lashes",
+        "blacklight cactus monster with glowing spines",
+        "giant sunflower villain with a hypnotic face",
+        "purple moonflower beast with smoky vines",
+        "red velvet plant monster with Broadway villain energy",
+        "glamorous emerald plant with gold-tipped teeth",
+        "giant flower mouth rising from a broken planter",
+        "mutant bouquet with multiple tiny screaming flower heads",
+        "glowing swamp plant monster with dripping moss",
+        "star-shaped alien blossom with cosmic pollen",
+        "monster tulip with oversized petals and sharp teeth",
+        "giant carnivorous plant sitting under a beauty salon dryer",
+        "vintage horror plant with curled vines and theatrical expression",
+        "diamond-studded plant monster with luxury villain energy",
+        "poison-green vine creature bursting through the floor",
+        "massive plant mouth framed by red curtains",
+        "sassy plant diva leaning over a flower shop counter",
+        "giant flytrap throne with leafy arms",
+        "carnivorous plant wrapped in Christmas lights",
+        "toothy flower monster inside a retro diner booth",
+        "glowing plant alien inside a cracked glass terrarium",
+        "giant plant serpent with rose petals and fangs",
+        "mutant garden queen blooming from a stage trapdoor",
+        "oversized carnivorous plant with velvet tongue",
+        "monster plant with golden vines and theatrical smoke",
+        "giant botanical beast with glowing eyes in the petals",
+        "pink-and-green horror flower with candy-colored danger",
+        "plant monster rising behind a scared florist",
+        "rose-vine creature wrapped around a microphone stand",
+        "giant orchid villain with opera-house drama",
+        "thorny glam plant with feather boa vines"
+      ],
+      personality: [
+        "None",
+        "hungry and dramatic",
+        "sassy and bossy",
+        "creepy but charming",
+        "glam villain energy",
+        "sweet-looking but dangerous",
+        "singing for attention",
+        "theatrical and demanding",
+        "flirty but terrifying",
+        "jealous of every bouquet in the shop",
+        "evil but fabulous",
+        "chaotic Broadway diva",
+        "soft voice with sinister intentions",
+        "too cute to trust",
+        "hungry for attention and applause",
+        "wicked garden gremlin energy",
+        "luxury villain with leafy attitude",
+        "dramatic plant who knows it is the star",
+        "mischievous, campy, and over-the-top",
+        "mysterious alien intelligence",
+        "sinister but hilarious",
+        "the flower shop’s worst employee",
+        "loud, glamorous, and impossible to ignore",
+        "danger wrapped in pretty petals",
+        "bossy plant with main-character syndrome"
+      ],
+      era: [
+        "None",
+        "1950s diner horror poster",
+        "1960s campy musical poster",
+        "retro Broadway stage production",
+        "vintage B-movie creature feature",
+        "Technicolor horror comedy",
+        "neon 1980s monster musical",
+        "old Hollywood theatrical poster",
+        "retro comic book horror",
+        "classic pulp magazine cover",
+        "drive-in movie poster style",
+        "campy sci-fi flower shop fantasy",
+        "vintage horror lobby card",
+        "glam rock monster musical",
+        "retro vinyl album cover style",
+        "cartoonish mid-century monster poster",
+        "1970s grindhouse botanical horror",
+        "1980s neon stage drama",
+        "1950s soda-shop monster scene",
+        "Broadway marquee poster style",
+        "retro newspaper ad horror vibe",
+        "colorful jukebox musical horror",
+        "classic monster movie one-sheet",
+        "camp theater poster with painted realism",
+        "old-school hand-painted cinema poster"
+      ],
+      scene: [
+        "None",
+        "old flower shop at night with flickering neon sign",
+        "rainy city alley behind a flower shop",
+        "retro diner window filled with strange plants",
+        "greenhouse at midnight with fog rolling in",
+        "Broadway stage with red curtains and spotlights",
+        "abandoned plant lab with glowing test tubes",
+        "neon street corner with cracked pavement and vines",
+        "small-town flower shop with a creepy basement door",
+        "beauty salon overtaken by vines",
+        "vintage theater backstage filled with monster plants",
+        "moonlit rooftop garden with city skyline",
+        "subway entrance covered in alien ivy",
+        "old record shop turned haunted plant nursery",
+        "1950s kitchen with a plant monster on the table",
+        "retro apartment window filled with wild vines",
+        "flower market after closing time",
+        "dark greenhouse with broken glass ceiling",
+        "pink neon botanical boutique",
+        "stage spotlight on one giant plant in a flower pot",
+        "city sidewalk flower stand during a thunderstorm",
+        "vintage motel courtyard swallowed by vines",
+        "old school science classroom with mutant plants",
+        "church basement garden club gone wrong",
+        "glam dressing room with a plant monster in the mirror"
+      ],
+      character: [
+        "None",
+        "nervous florist holding pruning shears",
+        "glam flower shop owner with big hair and bold makeup",
+        "retro singer trio posing in matching dresses",
+        "mad scientist with gardening gloves",
+        "fashionable plant caretaker with dramatic expression",
+        "Broadway diva confronting the monster plant",
+        "scared customer holding a bouquet",
+        "curious grandma florist with stylish glasses",
+        "young florist in vintage apron",
+        "retro delivery person dropping flower boxes",
+        "glamorous villain botanist",
+        "sassy shop assistant holding a watering can",
+        "dramatic theater performer surrounded by vines",
+        "fashion model posing beside the monster plant",
+        "old-school reporter taking notes",
+        "scared diner waitress with a tray of flowers",
+        "confident queen florist standing her ground",
+        "retro couple frozen in shock",
+        "flower shop cashier pointing at the plant",
+        "mysterious plant collector in a velvet coat"
+      ],
+      outfit: [
+        "None",
+        "vintage florist apron over a polka-dot dress",
+        "sparkly Broadway gown with gloves",
+        "1950s diner waitress uniform",
+        "retro pencil skirt and cardigan",
+        "green velvet suit with gold jewelry",
+        "pink satin dress with dramatic earrings",
+        "black leather jacket with floral embroidery",
+        "mad scientist lab coat with vine stains",
+        "glam red dress with rhinestone heels",
+        "purple sequin stage outfit",
+        "retro shop uniform with name tag",
+        "emerald gown with leaf-shaped accessories",
+        "high-fashion botanical couture",
+        "yellow sundress with vintage heels",
+        "old Hollywood fur stole and satin gloves",
+        "flower-print jumpsuit with platform shoes",
+        "campy sci-fi silver outfit",
+        "neon 1980s blazer and big earrings",
+        "glamorous gardening gloves and diamond necklace",
+        "dramatic black cape with rose lining"
+      ],
+      lighting: [
+        "None",
+        "neon green and hot pink rim lighting",
+        "Broadway spotlight with smoky shadows",
+        "moody rain lighting with glowing shop sign",
+        "dramatic low-angle horror lighting",
+        "soft vintage Technicolor glow",
+        "blacklight monster plant glow",
+        "gold theatrical stage lights",
+        "lightning flashes through greenhouse glass",
+        "pink neon reflected on wet pavement",
+        "glowing alien pollen floating in the air",
+        "warm diner light with creepy shadows",
+        "old movie projector glow",
+        "moonlight through cracked windows",
+        "flashbulb paparazzi lighting",
+        "soft glam beauty lighting with horror shadows",
+        "electric purple and lime green glow",
+        "foggy cinematic backlight",
+        "red curtain stage spotlight",
+        "vintage marquee bulb glow",
+        "dramatic shadow across the plant mouth"
+      ],
+      colors: [
+        "None",
+        "lime green, hot pink, black, and cream",
+        "emerald green, ruby red, gold, and midnight black",
+        "neon green, purple, and electric blue",
+        "vintage red, cream, teal, and black",
+        "bubblegum pink, poison green, white, and chrome",
+        "deep purple, neon lime, yellow, and black",
+        "retro orange, avocado green, cream, and brown",
+        "blood red, jungle green, and smoky gray",
+        "gold, emerald, magenta, and black",
+        "pastel pink with sinister green shadows",
+        "classic black, white, red, and green",
+        "Technicolor rainbow with monster green accents",
+        "glossy pink, chrome silver, and toxic green",
+        "dark plum, rose red, and glowing lime",
+        "teal blue, tomato red, cream, and black",
+        "alien green, hot magenta, and deep navy",
+        "vintage yellow, olive green, and dusty rose",
+        "purple velvet, gold, and emerald glow",
+        "red theater curtain, lime spotlight, and black shadows",
+        "candy-colored horror palette"
+      ],
+      typography: [
+        "None",
+        "large vintage horror title at the top",
+        "bold Broadway marquee letters",
+        "retro comic book bubble lettering",
+        "dripping slime text effect",
+        "hand-painted B-movie poster typography",
+        "cream serif headline with green shadow",
+        "pink neon sign lettering",
+        "chunky 1960s musical poster font",
+        "slanted pulp magazine title",
+        "gold theater marquee typography",
+        "jagged monster movie lettering",
+        "playbill-inspired layout",
+        "large stacked headline on one side",
+        "curved text around the plant mouth",
+        "text at bottom like a vintage movie poster",
+        "bold readable title with small tagline underneath",
+        "retro diner sign typography",
+        "glossy 3D green letters",
+        "hot pink script paired with bold serif",
+        "black-and-cream classic movie title layout"
+      ],
+      text: [
+        "None",
+        "Don't Feed The Flowers",
+        "The Plant Has Plans",
+        "Bloom With Caution",
+        "Pretty Petals. Bad Intentions.",
+        "This Garden Bites Back",
+        "Something Wicked Is Growing",
+        "Petals, Poison, And Problems",
+        "She Grew A Monster",
+        "Feed The Drama",
+        "The Flower Shop Is Alive",
+        "Cute Plant. Terrible Decisions.",
+        "Rooted In Chaos",
+        "The Vines Know Everything",
+        "A Little Shop. A Big Problem.",
+        "Bad Blooms Only",
+        "Where Pretty Things Bite",
+        "The Bloom Heard Everything",
+        "Garden Club Gone Wrong",
+        "Love, Lies, And Leaves",
+        "The Plant Wants The Spotlight",
+        "Water It? Girl, Run.",
+        "Petal Power With Teeth",
+        "This Bouquet Has Beef",
+        "A Bloom With An Appetite"
+      ],
+      camera: [
+        "None",
+        "single cinematic poster, one main scene only, no collage, no grid",
+        "full body character framing with visible feet",
+        "low-angle hero shot looking up at the plant monster",
+        "wide shot showing the full flower shop and monster plant",
+        "dramatic close-up of the plant mouth with character beside it",
+        "centered poster composition with balanced readable text",
+        "left character, right monster plant, headline above",
+        "monster plant in center with characters around it",
+        "stage poster composition with red curtains framing the scene",
+        "vertical 9:16 social-media poster",
+        "4:5 Pinterest-ready poster crop",
+        "3:4 vintage movie poster crop",
+        "cinematic wide angle with deep perspective",
+        "symmetrical poster layout with bold top title",
+        "diagonal action composition with vines crossing the frame"
+      ]
+    };
+
+    const selects = Object.keys(optionData);
+
+    function fillSelects(){
+      selects.forEach(key => {
+        const el = document.getElementById(key);
+        el.innerHTML = "";
+        optionData[key].forEach(value => {
+          const opt = document.createElement("option");
+          opt.value = value === "None" ? "" : value;
+          opt.textContent = value;
+          el.appendChild(opt);
+        });
+      });
+    }
+
+    function getValue(key){
+      const custom = document.getElementById("custom-" + key)?.value.trim();
+      const selected = document.getElementById(key)?.value.trim();
+      return custom || selected || "";
+    }
+
+    function line(label, value){
+      return value ? label + ": " + value + "." : "";
+    }
+
+    function generatePrompt(){
+      const parts = [];
+
+      const reference = getValue("reference");
+      if(reference) parts.push(reference);
+
+      parts.push("Create a high-quality realistic cinematic AI image poster.");
+      parts.push("Theme: campy retro monster plant horror musical inspired by vintage flower-shop creature features, without using exact copyrighted movie branding, logos, or character names.");
+
+      const order = [
+        ["Monster plant", "plant"],
+        ["Plant personality", "personality"],
+        ["Era / style", "era"],
+        ["Scene / background", "scene"],
+        ["Main character", "character"],
+        ["Outfit / styling", "outfit"],
+        ["Lighting", "lighting"],
+        ["Color palette", "colors"],
+        ["Typography style", "typography"],
+        ["Poster headline text", "text"],
+        ["Camera / framing", "camera"]
+      ];
+
+      order.forEach(([labelText, key]) => {
+        const value = getValue(key);
+        const built = line(labelText, value);
+        if(built) parts.push(built);
+      });
+
+      parts.push("Layout lock: single cinematic poster, one main scene only. No collage, no grid, no multiple panels, no duplicate mini-scenes, no extra images at the top, bottom, or sides.");
+      parts.push("Text rule: keep all poster text clean, readable, correctly spelled, balanced, and not covering faces, hands, the monster plant mouth, or important scene details.");
+      parts.push("Quality rule: polished, detailed, realistic, premium, social-media-ready, visually balanced, Pinterest-worthy, scroll-stopping.");
+      parts.push("Avoid blurry details, messy text, misspelled words, extra fingers, distorted hands, warped faces, duplicate limbs, random logos, watermarks, low-resolution details, and cluttered layouts.");
+
+      document.getElementById("output").value = parts.filter(Boolean).join("\n\n");
+      showToast("Prompt generated 🌿");
+    }
+
+    function randomChoice(arr){
+      const usable = arr.filter(v => v !== "None");
+      return usable[Math.floor(Math.random() * usable.length)] || "";
+    }
+
+    function isLocked(key){
+      return document.getElementById("lock-" + key)?.checked;
+    }
+
+    function randomizeUnlocked(){
+      selects.forEach(key => {
+        if(!isLocked(key)){
+          document.getElementById(key).value = randomChoice(optionData[key]);
+          const custom = document.getElementById("custom-" + key);
+          if(custom) custom.value = "";
+        }
+      });
+      generatePrompt();
+      showToast("Randomized unlocked sections 🎲");
+    }
+
+    async function copyPrompt(){
+      const text = document.getElementById("output").value;
+      if(!text.trim()){
+        showToast("Generate a prompt first");
+        return;
+      }
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("Copied plain text ✅");
+      }catch(e){
+        const out = document.getElementById("output");
+        out.select();
+        document.execCommand("copy");
+        showToast("Copied ✅");
+      }
+    }
+
+    function clearAll(){
+      selects.forEach(key => {
+        document.getElementById(key).value = "";
+        document.getElementById("custom-" + key).value = "";
+        const lock = document.getElementById("lock-" + key);
+        if(lock) lock.checked = false;
+      });
+      document.getElementById("output").value = "";
+      showToast("Cleared");
+    }
+
+    function savePrompt(){
+      const text = document.getElementById("output").value.trim();
+      if(!text){
+        showToast("Generate a prompt first");
+        return;
+      }
+      const saved = JSON.parse(localStorage.getItem("monsterPlantPrompts") || "[]");
+      saved.unshift({text, date:new Date().toLocaleString()});
+      localStorage.setItem("monsterPlantPrompts", JSON.stringify(saved.slice(0,10)));
+      renderSaved();
+      showToast("Saved prompt 💾");
+    }
+
+    function renderSaved(){
+      const saved = JSON.parse(localStorage.getItem("monsterPlantPrompts") || "[]");
+      const list = document.getElementById("savedList");
+      list.innerHTML = "";
+      if(saved.length === 0){
+        list.innerHTML = '<div class="saved-item">No saved prompts yet.</div>';
+        return;
+      }
+      saved.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "saved-item";
+        const preview = item.text.length > 260 ? item.text.slice(0,260) + "..." : item.text;
+        div.innerHTML = `<strong>Saved ${index + 1}</strong><br><small>${item.date}</small><br><br>${escapeHtml(preview)}<br><br><button class="secondary" onclick="loadSaved(${index})">Load</button>`;
+        list.appendChild(div);
+      });
+    }
+
+    function loadSaved(index){
+      const saved = JSON.parse(localStorage.getItem("monsterPlantPrompts") || "[]");
+      if(saved[index]){
+        document.getElementById("output").value = saved[index].text;
+        showToast("Loaded saved prompt");
+      }
+    }
+
+    function escapeHtml(str){
+      return str.replace(/[&<>"']/g, m => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
+      }[m]));
+    }
+
+    function showToast(message){
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    fillSelects();
+    renderSaved();
+  </script>
+</body>
+</html>
